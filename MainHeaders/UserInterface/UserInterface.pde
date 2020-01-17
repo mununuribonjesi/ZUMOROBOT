@@ -19,7 +19,7 @@ String text;
   
   String portName = Serial.list()[1];
   myPort = new Serial(this, portName, 9600);
-  
+
   cp5.addButton("forward").setPosition(120,10).setSize(50,50)
  .setColorBackground(color(30,144,255))
  .setColorLabel(color(0,0,0));
@@ -50,6 +50,8 @@ void draw(){
     move();
 
   if ( myPort.available() > 0) {  // If data is available,
+ 
+ println(myPort.readString());
 
   }            // Set background to white
   if (val == 0) {              // If the serial value is 0,
