@@ -9,10 +9,12 @@ int val; //data received from serial port
 int inBuffer;
 String text;
 int cnt =0;
+Textarea myTextarea;
+
 
  void setup(){
   
-  size(600,300);
+  size(700,600);
 
   cp5 = new ControlP5(this);
   
@@ -43,8 +45,20 @@ int cnt =0;
  .setColorBackground(color(255,0,0))
  .setColorLabel(color(0,0,0));
  
+   myTextarea = cp5.addTextarea("txt")
+                  .setPosition(50,300)
+                  .setSize(200,200)
+                  .setFont(createFont("arial",12))
+                  .setLineHeight(14)
+                  .setColor(color(128))
+                  .setColorBackground(color(255,100))
+                  .setColorForeground(color(255,100));
+ 
 
   }
+  
+
+
 
 
 void draw(){
@@ -52,7 +66,7 @@ void draw(){
 
 
   if ( myPort.available() > 0) {  // If data is available,
- 
+     myTextarea.setText(myPort.readString());
 
   }            // Set background to white
   if (val == 0) {              // If the serial value is 0,

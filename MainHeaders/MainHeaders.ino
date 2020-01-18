@@ -23,11 +23,12 @@ int lineSensorValues[NUM_SENSORS];
 Zumo32U4LineSensors lineSensors;
 Zumo32U4Motors motor;
 Zumo32U4Encoders encoders;
+L3G gyro;
 int countsLeft;
 int countsRight; 
 char guiCommand;
-int  speedl = 80;
-int speedr = 67;
+int  speedl = 110;
+int speedr = 97;
 bool b = false;
 
 
@@ -43,6 +44,11 @@ void setup() {
   Serial1.begin(9600);
   delay(3000);
   calibrateRobot();
+
+ turnSensorSetup();
+   delay(500);
+ turnSensorReset();
+
 
 }
 
@@ -83,46 +89,43 @@ void loop() {
 
     if (guiCommand == 'a')
     {
-      speedl = 200;
-      motor.setRightSpeed(speedl);
-
+        motor.setSpeeds(-150, 80);
+        delay(800);
+        motor.setSpeeds(STOP_SPEED, STOP_SPEED);
     }
 
     if (guiCommand == 'd')
     {
-     int countsLeft;
-  int countsRight;
- 
-  countsLeft = encoders.getCountsAndResetLeft();
-  countsRight = encoders.getCountsAndResetRight();
- 
-  delay(1000);
-  motor.setSpeeds(200,200);
-  do {
-    countsLeft = encoders.getCountsLeft();
-    countsRight = encoders.getCountsRight();
-  }  while(countsLeft<2000&&countsRight<2000);   
-  motor.setSpeeds(0,0);   
-  delay(1000);     
+    Serial.println("Rotating Right");
+    motor.setSpeeds(150, -80);
+    delay(900);
+    motor.setSpeeds(STOP_SPEED, STOP_SPEED);
 
-  countsLeft = encoders.getCountsAndResetLeft();   
-  countsRight = encoders.getCountsAndResetRight();   
-  motor.setSpeeds(-200,-200);   
-  do {     
-    countsLeft = encoders.getCountsLeft();     
-    countsRight = encoders.getCountsRight();   
-  }  while(countsLeft>-2000&&countsRight>-2000);
-  motor.setSpeeds(0,0);
     }
 
     if (guiCommand == 's')
-    {
-
-
-      speedl = -100;
-      speedr = -100;
-      motor.setSpeeds(speedl, speedr);
+    {  
+    Serial.println("Moving Backward");
+    motor.setLeftSpeed(-speedl);
+    motor.setRightSpeed(-speedr);
+    delay(200);
+    motor.setSpeeds(STOP_SPEED, STOP_SPEED);
     }
+    if (guiCommand == 'l')
+    {
+      turnLeft(90);
+    }
+
+     if (guiCommand == 'r')
+    {
+      turnRight(90);    
+    }
+
+    
+
+    
+
+    
 
     if (guiCommand == 'p')
     {
@@ -132,6 +135,29 @@ void loop() {
   }
 }
 
+void turnLeft(int degrees) {
+  turnSensorReset();
+  motor.setSpeeds(-TURN_SPEED, TURN_SPEED);
+  int angle = 0;
+  do {
+    delay(1);
+    turnSensorUpdate();
+    angle = (((int32_t)turnAngle >> 16) * 360) >> 16;
+  } while (angle < degrees);
+  motor.setSpeeds(0, 0);
+}
+
+void turnRight(int degrees) {
+  turnSensorReset();
+  motor.setSpeeds(TURN_SPEED, -TURN_SPEED);
+  int angle = 0;
+  do {
+    delay(1);
+    turnSensorUpdate();
+    angle = (((int32_t)turnAngle >> 16) * 360) >> 16;
+  } while (angle > -degrees);
+  motor.setSpeeds(0, 0);
+}
 
 bool detectWall(int sensor)
 {
@@ -149,11 +175,11 @@ void hitWall(int sensor, int cSensor, int negativeTurnValue, int positiveTurnVal
 {
   Serial1.println("hit right wall");
   int i = 0;
-  while (b == true && i < 100)
+  while (b == true && i < 80)
   {
     i++;
     
-    delay(0.6);
+    delay(1);
     
     lineSensors.readCalibrated(lineSensorValues);
 

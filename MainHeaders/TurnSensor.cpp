@@ -10,7 +10,6 @@ the robot has turned since the last time turnSensorReset was
 called.  This is computed solely using the Z axis of the gyro, so
 it could be inaccurate if the robot is rotated about the X or Y
 axes.
-
 Our convention is that a value of 0x20000000 represents a 45
 degree counter-clockwise rotation.  This means that a uint32_t
 can represent any angle between 0 degrees and 360 degrees.  If
@@ -35,7 +34,6 @@ uint16_t gyroLastUpdate = 0;
 gyro.  It uses the LCD, yellow LED, and button A.  While the LCD
 is displaying "Gyro cal", you should be careful to hold the robot
 still.
-
 The digital zero-rate level of the L3GD20H gyro can be as high as
 25 degrees per second, and this calibration helps us correct for
 that. */
@@ -54,11 +52,9 @@ void turnSensorSetup()
   // High-pass filter disabled
   gyro.writeReg(L3G::CTRL5, 0b00000000);
 
-  lcd.clear();
-  lcd.print(F("Gyro cal"));
+
 
   // Turn on the yellow LED in case the LCD is not available.
-  ledYellow(1);
 
   // Delay to give the user time to remove their finger.
   delay(500);
@@ -77,6 +73,10 @@ void turnSensorSetup()
   ledYellow(0);
   gyroOffset = total / 1024;
 
+  // Display the angle (in degrees from -180 to 180) until the
+  // user presses A.
+
+  turnSensorReset();
 }
 
 // This should be called to set the starting point for measuring
