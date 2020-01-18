@@ -49,11 +49,10 @@ int cnt =0;
 
 void draw(){
     background(0,0,0);  
-    move();
+
 
   if ( myPort.available() > 0) {  // If data is available,
  
- println(myPort.readString());
 
   }            // Set background to white
   if (val == 0) {              // If the serial value is 0,

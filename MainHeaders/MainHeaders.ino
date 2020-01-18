@@ -22,6 +22,9 @@ int calibrateData[3];
 int lineSensorValues[NUM_SENSORS];
 Zumo32U4LineSensors lineSensors;
 Zumo32U4Motors motor;
+Zumo32U4Encoders encoders;
+int countsLeft;
+int countsRight; 
 char guiCommand;
 int  speedl = 80;
 int speedr = 67;
@@ -87,8 +90,29 @@ void loop() {
 
     if (guiCommand == 'd')
     {
-      speedr = 200;
-      motor.setLeftSpeed(speedr);
+     int countsLeft;
+  int countsRight;
+ 
+  countsLeft = encoders.getCountsAndResetLeft();
+  countsRight = encoders.getCountsAndResetRight();
+ 
+  delay(1000);
+  motor.setSpeeds(200,200);
+  do {
+    countsLeft = encoders.getCountsLeft();
+    countsRight = encoders.getCountsRight();
+  }  while(countsLeft<2000&&countsRight<2000);   
+  motor.setSpeeds(0,0);   
+  delay(1000);     
+
+  countsLeft = encoders.getCountsAndResetLeft();   
+  countsRight = encoders.getCountsAndResetRight();   
+  motor.setSpeeds(-200,-200);   
+  do {     
+    countsLeft = encoders.getCountsLeft();     
+    countsRight = encoders.getCountsRight();   
+  }  while(countsLeft>-2000&&countsRight>-2000);
+  motor.setSpeeds(0,0);
     }
 
     if (guiCommand == 's')
