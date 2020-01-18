@@ -19,12 +19,12 @@
 #define rightSensor 2
 int calibrateData[3];
 
- int lineSensorValues[NUM_SENSORS];
+int lineSensorValues[NUM_SENSORS];
 Zumo32U4LineSensors lineSensors;
 Zumo32U4Motors motor;
 char guiCommand;
-     int  speedl = 80;
-     int speedr = 67;
+int  speedl = 80;
+int speedr = 67;
 bool b = false;
 
 
@@ -45,133 +45,24 @@ void setup() {
 
 void loop() {
 
+  if (b == true)
+  {
+    lineSensors.readCalibrated(lineSensorValues);
 
-
-
-
-  
-  if (b == true) {
-
-      lineSensors.readCalibrated(lineSensorValues);
-      
     if (detectWall(leftSensor))
     {
-
-      Serial1.println("hit left wall");
-      int i = 0;
-
-      while (b == false && i < 120)
-      {
-
-        i++;
-        
-        delay(0.6);
-        lineSensors.readCalibrated(lineSensorValues);
-  
-        
-        if (detectWall(rightSensor))
-        {
- ;
-          motor.setSpeeds(-80, -80);
-          delay(800);
-          Serial1.println("hit right wall");
-          motor.setSpeeds(0, 0);
-          b = false;
-        }
-
-
-        lineSensors.readCalibrated(lineSensorValues);
-        
-        if (detectWall(centerSensor))
-        {
-          motor.setSpeeds(-80, -80);
-          delay(600);
-          Serial1.println("hit center sensor");
-          motor.setSpeeds(0, 0);
-          b = false;
-        }
-      }
-      delay(1000);
-      if (b == true)
-      {
-        
-        motor.setSpeeds(TURN_SPEED, -TURN_SPEED);
-        delay(TURN_DURATION);
-        motor.setSpeeds(speedl, speedr);
-      }
+      lineSensors.readCalibrated(lineSensorValues);
+      hitWall(rightSensor, centerSensor, TURN_SPEED, -TURN_SPEED);
     }
-    
-  
+
     lineSensors.readCalibrated(lineSensorValues);
 
     if (detectWall(rightSensor))
     {
-
-      Serial1.println("hit right wall");
-      int i = 0;
-      while (b == true && i < 100)
-      {
-
-        i++;
-
-
-        delay(0.6);
-        lineSensors.readCalibrated(lineSensorValues);
-     
-        if (detectWall(leftSensor))
-        {
-      
-          motor.setSpeeds(-80, -80);
-          delay(600);
-          Serial1.println("hit leftwall");
-          motor.setSpeeds(0, 0);
-          b = false;
-        }
-         
-     
-        lineSensors.readCalibrated(lineSensorValues);
-   
-        if (detectWall(centerSensor))
-        {
-         
-          motor.setSpeeds(-80, -80);
-          delay(600);
-          Serial1.println("hit center sensor");
-          motor.setSpeeds(0, 0);
-          b = false;
-        }
-
-      }
-
-      if (b == true)
-      {
-        delay(1);
-        motor.setSpeeds(-TURN_SPEED, TURN_SPEED);
-        delay(TURN_DURATION);
-        motor.setSpeeds(speedl, speedr);
-
-      }
-
-    }
-
-    else
-    {
-      // Otherwise, go straight.
-      motor.setSpeeds(speedl, speedr);
+      lineSensors.readCalibrated(lineSensorValues);
+      hitWall(leftSensor, centerSensor, -TURN_SPEED, TURN_SPEED);
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -220,20 +111,58 @@ void loop() {
 
 bool detectWall(int sensor)
 {
-
   bool response = false;
-
-  //delay(25);
 
   if (lineSensorValues[sensor] > calibrateData[sensor] / 2)
   {
     response = true;
+  }
+
+  return response;
+}
+
+void hitWall(int sensor, int cSensor, int negativeTurnValue, int positiveTurnValue)
+{
+  Serial1.println("hit right wall");
+  int i = 0;
+  while (b == true && i < 100)
+  {
+    i++;
+    
+    delay(0.6);
+    
+    lineSensors.readCalibrated(lineSensorValues);
+
+    if (detectWall(sensor))
+    {
+
+      motor.setSpeeds(-80, -80);
+      delay(600);
+      Serial1.println("hit leftwall");
+      motor.setSpeeds(0, 0);
+      b = false;
+    }
+    
+    lineSensors.readCalibrated(lineSensorValues);
+   
+    if (detectWall(cSensor))
+    {
+      motor.setSpeeds(-80, -80);
+      delay(600);
+      Serial1.println("hit center sensor");
+      motor.setSpeeds(0, 0);
+      b = false;
+    }
 
   }
 
-
-  return response;
-
+  if (b == true)
+  {
+    delay(1);
+    motor.setSpeeds(negativeTurnValue, positiveTurnValue);
+    delay(TURN_DURATION);
+    motor.setSpeeds(speedl, speedr);
+  }
 }
 
 void calibrateRobot() {

@@ -4,10 +4,11 @@ ControlP5 cp5;
 Serial myPort; //creates local serial object from serial library
 
 boolean [] keys = new boolean[128];
-
+ListBox l;
 int val; //data received from serial port
 int inBuffer;
 String text;
+int cnt =0;
 
  void setup(){
   
@@ -19,6 +20,8 @@ String text;
   
   String portName = Serial.list()[1];
   myPort = new Serial(this, portName, 9600);
+  
+  
 
   cp5.addButton("forward").setPosition(120,10).setSize(50,50)
  .setColorBackground(color(30,144,255))
@@ -40,10 +43,9 @@ String text;
  .setColorBackground(color(255,0,0))
  .setColorLabel(color(0,0,0));
  
- cp5.addTextfield("messages").setPosition(400,200).setSize(100,50).setAutoClear(true).setText("" + inBuffer);
- 
- text = myPort.readString();
-}
+
+  }
+
 
 void draw(){
     background(0,0,0);  
