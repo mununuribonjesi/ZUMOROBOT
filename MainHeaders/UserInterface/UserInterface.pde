@@ -10,69 +10,75 @@ int inBuffer;
 String text;
 int cnt =0;
 Textarea myTextarea;
+ListBox listBox;
 
+void setup() {
 
- void setup(){
-  
-  size(700,600);
+  size(700, 600);
 
   cp5 = new ControlP5(this);
-  
+
   printArray(Serial.list());
-  
+
   String portName = Serial.list()[1];
   myPort = new Serial(this, portName, 9600);
-  
-  
+  myPort.bufferUntil('\n');
 
-  cp5.addButton("forward").setPosition(120,10).setSize(50,50)
- .setColorBackground(color(30,144,255))
- .setColorLabel(color(0,0,0));
- 
-   cp5.addButton("left").setPosition(30,100).setSize(50,50)
- .setColorBackground(color(0,255,0))
- .setColorLabel(color(0,0,0));
- 
-    cp5.addButton("right").setPosition(210,100).setSize(50,50)
- .setColorBackground(color(255,255,0))
- .setColorLabel(color(0,0,0));
-  
-  cp5.addButton("reverse").setPosition(120,200).setSize(50,50)
- .setColorBackground(color(255,0,0))
- .setColorLabel(color(0,0,0));
- 
-  cp5.addButton("stop").setPosition(400,100).setSize(150,50)
- .setColorBackground(color(255,0,0))
- .setColorLabel(color(0,0,0));
- 
-   myTextarea = cp5.addTextarea("txt")
-                  .setPosition(50,300)
-                  .setSize(200,200)
-                  .setFont(createFont("arial",12))
-                  .setLineHeight(14)
-                  .setColor(color(128))
-                  .setColorBackground(color(255,100))
-                  .setColorForeground(color(255,100));
- 
+  listBox = cp5.addListBox("Robot Log").setPosition(300, 300).setSize(300, 800)
+    .setColorBackground(color(30, 144, 255))
+    .setColorLabel(color(0, 0, 0));
 
-  }
-  
+  cp5.addButton("forward").setPosition(120, 10).setSize(50, 50)
+    .setColorBackground(color(30, 144, 255))
+    .setColorLabel(color(0, 0, 0));
 
+  cp5.addButton("left").setPosition(30, 100).setSize(50, 50)
+    .setColorBackground(color(0, 255, 0))
+    .setColorLabel(color(0, 0, 0));
 
+  cp5.addButton("right").setPosition(210, 100).setSize(50, 50)
+    .setColorBackground(color(255, 255, 0))
+    .setColorLabel(color(0, 0, 0));
 
+  cp5.addButton("reverse").setPosition(120, 200).setSize(50, 50)
+    .setColorBackground(color(255, 0, 0))
+    .setColorLabel(color(0, 0, 0));
 
-void draw(){
-    background(0,0,0);  
+  cp5.addButton("stop").setPosition(400, 100).setSize(150, 50)
+    .setColorBackground(color(255, 0, 0))
+    .setColorLabel(color(0, 0, 0));
+
+  cp5.addButton("L90").setPosition(300, 200).setSize(150, 50)
+    .setColorBackground(color(255, 0, 0))
+    .setColorLabel(color(0, 0, 0));
+
+  cp5.addButton("R90").setPosition(500, 200).setSize(150, 50)
+    .setColorBackground(color(255, 0, 0))
+    .setColorLabel(color(0, 0, 0));  
+    
+    cp5.addButton("clear").setPosition(400, 500).setSize(150, 50)
+    .setColorBackground(color(255, 0, 0))
+    .setColorLabel(color(0, 0, 0));
+    
+}
+
+void draw() {
+  background(0, 0, 0);  
+  move();
 
 
   if ( myPort.available() > 0) {  // If data is available,
-     myTextarea.setText(myPort.readString());
+    
+    listBox.addItem(myPort.readString(), 1);
+    myPort.clear();
+   
+ 
+  }
 
-  }            // Set background to white
+  // Set background to white
   if (val == 0) {              // If the serial value is 0,
     fill(0);                   // set fill to black
-  } 
-  else {                       // If the serial value is not 0,
+  } else {                       // If the serial value is not 0,
     fill(204);                 // set fill to light gray
   }
   rect(50, 50, 100, 100);
@@ -81,38 +87,20 @@ void draw(){
 
 void move()
 {
-  
-  if(keys['w']) 
+  if (keys['c']) 
   {
-    myPort.write('w');
-  }
-
-  else if(keys['a']) 
-  {
-    myPort.write('a');
+    myPort.write('c');
   }
   
-  else if(keys['s']) 
+    if (keys['f']) 
   {
-    myPort.write('s');
+    myPort.write('f');
   }
-   
-  else if(keys['d']) 
-  {
-    myPort.write('d');
-  }
-  else 
-  {
-    myPort.write('p');
-  }
-  
 }
-
 
 void keyPressed()
 {  
   keys[key] = true;
-
 }
 
 void keyReleased()
@@ -120,21 +108,31 @@ void keyReleased()
   keys[key] = false;
 }
 
-void forward(){
+void forward() {
   myPort.write('w');
 }
 
-void left(){
+void left() {
   myPort.write('a');
 }
 
-void right(){
+void right() {
   myPort.write('d');
 }
 
-void stop(){
+void clear() {
+  listBox.getItems().clear();
+}
+
+void stop() {
   myPort.write('p');
 }
-void reverse(){
+void reverse() {
   myPort.write('s');
+}
+void L90() {
+  myPort.write('l');
+}
+void R90() {
+  myPort.write('r');
 }
