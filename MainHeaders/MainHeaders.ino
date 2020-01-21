@@ -6,7 +6,7 @@
 
 // These might need to be tuned for different motor types.
 #define REVERSE_SPEED     50  // 0 is stopped, 400 is full speed
-#define TURN_SPEED        120
+#define TURN_SPEED        100
 #define STOP_SPEED        0
 #define FORWARD_SPEED     80
 #define REVERSE_DURATION  200  // ms
