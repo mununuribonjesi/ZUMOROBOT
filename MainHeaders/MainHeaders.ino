@@ -161,24 +161,23 @@ void turnLeft(int degrees) {
   String left = "left";
   motor.setSpeeds(-TURN_SPEED, TURN_SPEED);
   proximitySensors.read();
-  searchTheRoom(left,degrees);
+  searchTheRoom(left);
   int angle = 0;
   do {
     delay(1);
     turnSensorUpdate();
     angle = (((int32_t)turnAngle >> 16) * 360) >> 16;
     proximitySensors.read();
-    searchTheRoom(left,degrees);
+    searchTheRoom(left);
   } while (angle < degrees);
   motor.setSpeeds(0, 0);
 }
 
 
-void searchTheRoom(String room, int turns)
+void searchTheRoom(String room)
 {
  
   if (searchRoom == true) {
-     turns = 360;
     if (proximitySensors.countsFrontWithLeftLeds() >= 6 || proximitySensors.countsFrontWithRightLeds() >= 6)
     {
       Serial1.println("found person in: " + room + ":" +"room :" + count + "");
@@ -197,7 +196,7 @@ void turnRight(int degrees) {
   String right = "right";
   motor.setSpeeds(TURN_SPEED, -TURN_SPEED);
   proximitySensors.read();
-  searchTheRoom(right,degrees);
+  searchTheRoom(right);
   int angle = 0;
   do {
     delay(1);
@@ -205,7 +204,7 @@ void turnRight(int degrees) {
     angle = (((int32_t)turnAngle >> 16) * 360) >> 16;
     proximitySensors.read();
     proximitySensors.read();
-    searchTheRoom(right,degrees);
+    searchTheRoom(right);
   } while (angle > -degrees);
   motor.setSpeeds(0, 0);
 }
