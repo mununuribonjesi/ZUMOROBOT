@@ -1,22 +1,20 @@
-#ifndef AutonomousControl_h
-#define AutonomousControl_h
-
-#include "ZumoMotors.h"
-#include <Arduino.h>
-#include "TurnSensor.h"
+#pragma once
+#include <Zumo32U4.h>
 
 
-#define NUM_SENSORS 5
-
-class AutonomousControl {
-  public:
-    Zumo32U4LineSensors lineSensors;
-    uint16_t lineSensorValues[NUM_SENSORS];
-    bool useEmitters = true;
-    uint8_t selectedSensorIndex = 0;
-    void setup();
-    void loadCustomCharacters();
-  
-  private:
-};
-#endif
+extern int calibrateData[3];
+bool detectWall(int sensor);
+extern Zumo32U4LineSensors lineSensors;
+extern bool autonomousControl;
+extern Zumo32U4Motors motor;
+extern int NUM_SENSORS;
+extern int lineSensorValues[3];
+extern int TURN_DURATION;
+extern int speedl;
+extern int speedr;
+extern int leftSensor;
+extern int centerSensor;
+extern int rightSensor;
+extern int TURN_SPEED;
+void hitWall(int sensor, int cSensor, int negativeTurnValue, int positiveTurnValue);
+void automaticControl();

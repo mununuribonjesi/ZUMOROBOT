@@ -1,22 +1,78 @@
 #include "AutonomousControl.h"
 
-void AutonomousControl::setup()
+bool detectWall(int sensor)
 {
-  lineSensors.initFiveSensors();
-  
+  bool response = false;
+
+  if (lineSensorValues[sensor] > calibrateData[sensor] / 2)
+  {
+    response = true;
+  }
+
+  return response;
 }
 
 
-void AutonomousControl::loadCustomCharacters()
+void hitWall(int sensor, int cSensor, int negativeTurnValue, int positiveTurnValue)
 {
-  static const char levels[] PROGMEM = {
-    0, 0, 0, 0, 0, 0, 0, 63, 63, 63, 63, 63, 63, 63
-  };
-  lcd.loadCustomCharacter(levels + 0, 0);  // 1 bar
-  lcd.loadCustomCharacter(levels + 1, 1);  // 2 bars
-  lcd.loadCustomCharacter(levels + 2, 2);  // 3 bars
-  lcd.loadCustomCharacter(levels + 3, 3);  // 4 bars
-  lcd.loadCustomCharacter(levels + 4, 4);  // 5 bars
-  lcd.loadCustomCharacter(levels + 5, 5);  // 6 bars
-  lcd.loadCustomCharacter(levels + 6, 6);  // 7 bars
+  int i = 0;
+  while (autonomousControl == true && i < 80)
+  {
+    i++;
+
+    delay(1);
+
+    lineSensors.readCalibrated(lineSensorValues);
+
+    if (detectWall(sensor))
+    {
+      motor.setSpeeds(-80, -80);
+      delay(250);
+      motor.setSpeeds(0, 0);
+      autonomousControl = false;
+      Serial1.println("Hit wall \n");
+    }
+
+    lineSensors.readCalibrated(lineSensorValues);
+
+    if (detectWall(cSensor))
+    {
+      motor.setSpeeds(-80, -80);
+      delay(250);
+      motor.setSpeeds(0, 0);
+      autonomousControl = false;
+      Serial1.println("Hit wall \n");
+    }
+  }
+
+
+  if (autonomousControl == true)
+  {
+    delay(1);
+    motor.setSpeeds(negativeTurnValue, positiveTurnValue);
+    delay(TURN_DURATION);
+    motor.setSpeeds(speedl, speedr);
+  }
+}
+
+void automaticControl(){
+  if (autonomousControl == true)
+  {
+
+    lineSensors.readCalibrated(lineSensorValues);
+
+    if (detectWall(leftSensor))
+    {
+      lineSensors.readCalibrated(lineSensorValues);
+      hitWall(rightSensor, centerSensor, TURN_SPEED, -TURN_SPEED);
+    }
+
+    lineSensors.readCalibrated(lineSensorValues);
+
+    if (detectWall(rightSensor))
+    {
+      lineSensors.readCalibrated(lineSensorValues);
+      hitWall(leftSensor, centerSensor, -TURN_SPEED, TURN_SPEED);
+    }
+  }
 }
