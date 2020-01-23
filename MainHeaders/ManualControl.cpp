@@ -52,13 +52,14 @@ void manualControl(int ls, int rs)
         autonomousControl = false;
         motor.setSpeeds(0, 0);
       }
-
-    }
-
     else
     {
       searchRoom = false;
     }
+
+    }
+
+
 
     if (Command == 'r')
     {
