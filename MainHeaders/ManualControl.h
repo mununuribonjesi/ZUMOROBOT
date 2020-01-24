@@ -14,7 +14,7 @@ extern Zumo32U4Buzzer buzzer;
 void turnLeft(int degrees,int tSpeed1,int tSpeed2);
 void turnRight(int degrees,int tSpeed1,int tSpeed2);
 
-void searchTheRoom(String room);
+void searchTheRoom(String room,int degree);
 
 
 const char fugue[] PROGMEM =

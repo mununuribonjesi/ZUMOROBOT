@@ -46,17 +46,11 @@ void manualControl(int ls, int rs)
 
     if (Command == 'f')
     {
-      if (searchRoom == false)
-      {
+   
         searchRoom = true;
         autonomousControl = false;
         motor.setSpeeds(0, 0);
-      }
-    else
-    {
-      searchRoom = false;
-    }
-
+        turnSensorReset();
     }
 
 
@@ -79,16 +73,15 @@ void turnLeft(int degrees,int tSpeed1,int tSpeed2) {
   String left = "left";
   motor.setSpeeds(-tSpeed1, tSpeed2);
   pSensors.read();
-  searchTheRoom(left);
   int angle = 0;
   do {
     delay(1);
     turnSensorUpdate();
     angle = (((int32_t)turnAngle >> 16) * 360) >> 16;
     pSensors.read();
-    searchTheRoom(left);
   } while (angle < degrees);
   motor.setSpeeds(0, 0);
+  searchTheRoom(left,90);
 }
 
 void turnRight(int degrees,int tSpeed1,int tSpeed2) {
@@ -96,19 +89,18 @@ void turnRight(int degrees,int tSpeed1,int tSpeed2) {
   String right = "right";
   motor.setSpeeds(tSpeed1, -tSpeed2);
   pSensors.read();
-  searchTheRoom(right);
   int angle = 0;
   do {
     delay(1);
     turnSensorUpdate();
     angle = (((int32_t)turnAngle >> 16) * 360) >> 16;
     pSensors.read();
-    searchTheRoom(right);
   } while (angle > -degrees);
   motor.setSpeeds(0, 0);
+ searchTheRoom(right,90);
 }
 
-void searchTheRoom(String room)
+void searchTheRoom(String room,int turn)
 {
 
   if (searchRoom == true) {
@@ -118,8 +110,16 @@ void searchTheRoom(String room)
       
       searchRoom = false;
       buzzer.playFrequency(440, 200, 15);
-      // Delay to give the tone time to finish.
+      if(room == "left")
+      {
+        turnRight(turn,100,100);
+      }
+      else
+      {
+        turnLeft(turn,100,100);
+      }
       delay(1000);
+      
 
     }
   }

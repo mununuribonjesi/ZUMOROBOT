@@ -1,5 +1,5 @@
 #include "AutonomousControl.h"
-
+#include "TurnSensor.h"
 bool detectWall(int sensor)
 {
   bool response = false;
@@ -31,6 +31,7 @@ void hitWall(int sensor, int cSensor, int negativeTurnValue, int positiveTurnVal
       motor.setSpeeds(0, 0);
       autonomousControl = false;
       Serial1.println("Hit wall \n");
+      turnSensorReset();
     }
 
     lineSensors.readCalibrated(lineSensorValues);
@@ -42,6 +43,7 @@ void hitWall(int sensor, int cSensor, int negativeTurnValue, int positiveTurnVal
       motor.setSpeeds(0, 0);
       autonomousControl = false;
       Serial1.println("Hit wall \n");
+      turnSensorReset();
     }
   }
 
