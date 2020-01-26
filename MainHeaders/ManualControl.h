@@ -3,6 +3,9 @@
 #include "TurnSensor.h"
 #include <Zumo32U4.h>
 
+
+//extern values will be declared as global variables in the main file
+
 extern char Command;
 extern bool autonomousControl;
 extern bool searchRoom;
@@ -11,10 +14,10 @@ void manualControl(int ls, int rs);
 extern Zumo32U4Motors motor;
 extern Zumo32U4ProximitySensors pSensors;
 extern Zumo32U4Buzzer buzzer;
-void turnLeft(int degrees,int tSpeed1,int tSpeed2);
-void turnRight(int degrees,int tSpeed1,int tSpeed2);
+void turnLeft(int degrees, int tSpeed1, int tSpeed2);
+void turnRight(int degrees, int tSpeed1, int tSpeed2);
 
-void searchTheRoom(String room,int degree);
+void searchTheRoom(String room, int degree);
 
 
 const char fugue[] PROGMEM =

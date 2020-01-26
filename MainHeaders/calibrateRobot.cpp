@@ -8,12 +8,12 @@ void calibrateRobot() {
   {
     if (i > 30 && i <= 90)
     {
-      // On above numbers spin right
+      //spin right
       motor.setSpeeds(-CALIBERATE_SPEED, CALIBERATE_SPEED);
     }
     else
     {
-      // on other numbers spin left
+      // spin left
       motor.setSpeeds(CALIBERATE_SPEED, -CALIBERATE_SPEED);
     }
 
@@ -23,7 +23,8 @@ void calibrateRobot() {
 
   for (int i = 0; i < 3; i++)
   {
-    calibrateData[i] = lineSensors.calibratedMaximumOn[i];
+    calibrateData[i] = lineSensors.calibratedMaximumOn[i]; 
+    //use these values to check lines instead of QTR threshold
   }
 
   motor.setSpeeds(STOP_SPEED, STOP_SPEED);

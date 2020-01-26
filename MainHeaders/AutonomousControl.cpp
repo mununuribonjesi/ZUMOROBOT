@@ -1,5 +1,8 @@
 #include "AutonomousControl.h"
 #include "TurnSensor.h"
+
+//if sensor detects wall return true response
+
 bool detectWall(int sensor)
 {
   bool response = false;
@@ -12,6 +15,7 @@ bool detectWall(int sensor)
   return response;
 }
 
+//check if sensors have hit wall if not just keep robot in between the lines
 
 void hitWall(int sensor, int cSensor, int negativeTurnValue, int positiveTurnValue)
 {
@@ -56,6 +60,9 @@ void hitWall(int sensor, int cSensor, int negativeTurnValue, int positiveTurnVal
     motor.setSpeeds(speedl, speedr);
   }
 }
+
+
+//autonomous control function 
 
 void automaticControl(){
   if (autonomousControl == true)

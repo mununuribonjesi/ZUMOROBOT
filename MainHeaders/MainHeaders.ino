@@ -4,15 +4,10 @@
 #include "AutonomousControl.h"
 #include <Zumo32U4.h>
 #include "calibrateRobot.h"
-
-
-#define QTR_THRESHOLD     700 // microseconds
-
-// These might need to be tuned for different motor types.
-#define REVERSE_SPEED     50  // 0 is stopped, 400 is full speed
-
 #define FORWARD_SPEED     80
 #define REVERSE_DURATION  200  // ms
+
+//Global Variables 
 
 int leftSensor = 0;
 int centerSensor = 1;
@@ -53,6 +48,8 @@ void setup() {
 }
 
 void loop() {
+  //autonomous control
   automaticControl();
+  //manual control 
   manualControl(speedl,speedr);
 }

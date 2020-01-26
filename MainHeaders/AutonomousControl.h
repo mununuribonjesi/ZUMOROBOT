@@ -1,7 +1,7 @@
 #pragma once
 #include <Zumo32U4.h>
 
-
+//extern values will be declared as global variables in the main file
 extern int calibrateData[3];
 bool detectWall(int sensor);
 extern Zumo32U4LineSensors lineSensors;

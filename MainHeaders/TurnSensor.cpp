@@ -3,11 +3,8 @@
 #include "TurnSensor.h"
 
 uint32_t turnAngle = 0;
-
 int16_t turnRate;
-
 int16_t gyroOffset;
-
 uint16_t gyroLastUpdate = 0;
 
 void turnSensorSetup()
@@ -23,7 +20,7 @@ void turnSensorSetup()
   int32_t total = 0;
   for (uint16_t i = 0; i < 1024; i++)
   {
-    while(!gyro.readReg(L3G::STATUS_REG) & 0x08);
+    while (!gyro.readReg(L3G::STATUS_REG) & 0x08);
     gyro.read();
     total += gyro.g.z;
   }
