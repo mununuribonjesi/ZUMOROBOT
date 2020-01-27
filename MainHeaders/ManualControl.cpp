@@ -107,7 +107,6 @@ void turnRight(int degrees, int tSpeed1, int tSpeed2) {
 
 void searchTheRoom(String room, int turn)
 {
-
   if (searchRoom == true) {
     if (pSensors.countsFrontWithLeftLeds() >= 6 || pSensors.countsFrontWithRightLeds() >= 6)
     {
@@ -127,5 +126,4 @@ void searchTheRoom(String room, int turn)
       delay(1000);
     }
   }
-
 }

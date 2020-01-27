@@ -39,9 +39,11 @@ void setup() {
 
   Serial1.begin(9600);
   delay(3000);
+  //robot caliberation
   calibrateRobot();
   turnSensorSetup();
   delay(500);
+  //reset turn sensor 
   turnSensorReset();
   pSensors.initThreeSensors();
 
